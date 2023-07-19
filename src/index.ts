@@ -1,9 +1,12 @@
+import { GlobalEventNames } from '@core/types/events';
 import { Call } from '@core/types/phone';
-import { Log, CallInfo, GlobalEventNames } from '@core/types/events';
 
 type Events = GlobalEventNames | 'widgetReady';
 
-const log = (...args: any[]) => console.log('widget-server', ...args);
+const log = (...args: any[]) => {
+  if (!location.host.startsWith('localhost') && !location.host.startsWith('127.0.0.1')) return;
+  console.log('widget-server', ...args);
+};
 
 (function () {
   window.Brekeke.renderWidget(
@@ -21,8 +24,6 @@ const log = (...args: any[]) => console.log('widget-server', ...args);
        onLogEvent,
      }) => {
       const app = window.parent;
-
-      const calls: Record<string, Call> = {};
 
       const messageName = (name: Events) => `brekeke:${name}`;
 
@@ -54,9 +55,7 @@ const log = (...args: any[]) => console.log('widget-server', ...args);
               fireConfigEvent(data);
               break;
             case messageName('log-saved'):
-              const log = data as Log;
-              fireLogSavedEvent(log);
-              delete calls[log.call.pbxRoomId];
+              fireLogSavedEvent(data);
               break;
           }
         } catch (e) {
@@ -66,32 +65,17 @@ const log = (...args: any[]) => console.log('widget-server', ...args);
 
       sendMessage('widgetReady');
 
-      onLoggedInEvent(account => {
-        sendMessage('logged-in', account);
-      });
+      onLoggedInEvent(account => sendMessage('logged-in', account));
 
-      onLoggedOutEvent(() => {
-        sendMessage('logged-out');
-      });
+      onLoggedOutEvent(() => sendMessage('logged-out'));
 
-      onCallEvent(call => {
-        calls[call.pbxRoomId] = call;
-        sendMessage('call', simplifyCall(call));
-      });
+      onCallEvent(call => sendMessage('call', simplifyCall(call)));
 
-      onCallUpdatedEvent(call => {
-        calls[call.pbxRoomId] = call;
-        sendMessage('call-updated', simplifyCall(call));
-      });
+      onCallUpdatedEvent(call => sendMessage('call-updated', simplifyCall(call)));
 
-      onCallEndedEvent(call => {
-        calls[call.pbxRoomId] = call;
-        sendMessage('call-ended', simplifyCall(call));
-      });
+      onCallEndedEvent(call => sendMessage('call-ended', simplifyCall(call)));
 
-      onLogEvent(log => {
-        sendMessage('log', { ...log, call: simplifyCall(log.call) });
-      });
+      onLogEvent(log => sendMessage('log', { ...log, call: simplifyCall(log.call) }));
     });
 })();
 
@@ -108,9 +92,3 @@ const simplifyCall = (call: Call) => {
     return acc;
   }, {} as Call);
 }
-
-const formatRecordName = (name: string, type: string) => `[${type}] ${name}`;
-
-const formatDate = (date: Date) => {
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-};
