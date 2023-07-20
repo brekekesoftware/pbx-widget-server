@@ -81,16 +81,12 @@ const logger = (...args: any[]) => {
     });
 })();
 
+// types that can be passed to postMessage
 const validTypes = ['string', 'number', 'boolean'];
 const simplifyCall = (call: Call) => {
-  return Object.keys(call).reduce((acc, key) => {
-    const property: unknown = call[key as keyof Call];
-
-    if (validTypes.includes(typeof property)) {
-      // @ts-ignore
-      acc[key] = property;
-    }
-
+  return Object.entries(call).reduce((acc, [k, v]) => {
+    // @ts-ignore
+    if (validTypes.includes(typeof v)) acc[k] = v;
     return acc;
   }, {} as Call);
 }
