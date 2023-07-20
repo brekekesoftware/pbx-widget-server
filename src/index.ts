@@ -1,7 +1,7 @@
 import { GlobalEventNames, GlobalEventDetails } from '@core/types/events';
 import { Call } from '@core/types/phone';
 
-const log = (...args: any[]) => {
+const logger = (...args: any[]) => {
   if (!location.host.startsWith('localhost') && !location.host.startsWith('127.0.0.1')) return;
   if (typeof args[0] === 'string' && args[0].includes('error')) {
     console.error('widget-server', ...args);
@@ -33,7 +33,7 @@ const log = (...args: any[]) => {
         try {
           app.postMessage(JSON.stringify({ name: messageName(name), data }), '*');
         } catch (e) {
-          log('send message error', name, e);
+          logger('send message error', name, e);
         }
       };
 
@@ -42,8 +42,8 @@ const log = (...args: any[]) => {
           const { name, data } = JSON.parse(event.data);
           if (!name || (typeof name == 'string' && !name.startsWith('brekeke:'))) return;
 
-          log(`${name} message received`, event);
-          log(`${name} message data`, data);
+          logger(`${name} message received`, event);
+          logger(`${name} message data`, data);
 
           switch (name) {
             case messageName('make-call'):
@@ -61,7 +61,7 @@ const log = (...args: any[]) => {
               break;
           }
         } catch (e) {
-          log('message error, invalid json string', e);
+          logger('message error, invalid json string', e);
         }
       });
 
