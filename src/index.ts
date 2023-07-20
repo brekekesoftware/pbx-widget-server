@@ -3,6 +3,10 @@ import { Call } from '@core/types/phone';
 
 const log = (...args: any[]) => {
   if (!location.host.startsWith('localhost') && !location.host.startsWith('127.0.0.1')) return;
+  if (typeof args[0] === 'string' && args[0].includes('error')) {
+    console.error('widget-server', ...args);
+    return;
+  }
   console.log('widget-server', ...args);
 };
 
