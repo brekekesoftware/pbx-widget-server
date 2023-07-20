@@ -18,6 +18,7 @@ const logger = (...args: any[]) => {
        fireConfigEvent,
        fireLogSavedEvent,
        fireMakeCallEvent,
+       onCallRecordedEvent,
        onCallUpdatedEvent,
        onCallEndedEvent,
        onLoggedOutEvent,
@@ -76,6 +77,8 @@ const logger = (...args: any[]) => {
       onCallUpdatedEvent(call => sendMessage('call-updated', simplifyCall(call)));
 
       onCallEndedEvent(call => sendMessage('call-ended', simplifyCall(call)));
+
+      onCallRecordedEvent(record => sendMessage('call-recorded', record));
 
       onLogEvent(log => sendMessage('log', { ...log, call: simplifyCall(log.call) }));
     });
