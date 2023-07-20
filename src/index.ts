@@ -1,7 +1,5 @@
-import { GlobalEventNames } from '@core/types/events';
+import { GlobalEventNames, GlobalEventDetails } from '@core/types/events';
 import { Call } from '@core/types/phone';
-
-type Events = GlobalEventNames | 'widgetReady';
 
 const log = (...args: any[]) => {
   if (!location.host.startsWith('localhost') && !location.host.startsWith('127.0.0.1')) return;
@@ -25,9 +23,9 @@ const log = (...args: any[]) => {
      }) => {
       const app = window.parent;
 
-      const messageName = (name: Events) => `brekeke:${name}`;
+      const messageName = (name: GlobalEventNames | 'widgetReady') => `brekeke:${name}`;
 
-      const sendMessage = <T>(name: Events, data?: T) => {
+      const sendMessage = <T extends GlobalEventNames>(name: T | 'widgetReady', data?: GlobalEventDetails<T>) => {
         try {
           app.postMessage(JSON.stringify({ name: messageName(name), data }), '*');
         } catch (e) {
