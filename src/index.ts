@@ -25,6 +25,7 @@ const logger = (...args: any[]) => {
        onLoggedInEvent,
        onCallEvent,
        onLogEvent,
+       onContactSelectedEvent,
      }) => {
       const app = window.parent;
 
@@ -77,6 +78,8 @@ const logger = (...args: any[]) => {
       onCallUpdatedEvent(call => sendMessage('call-updated', simplifyCall(call)));
 
       onCallEndedEvent(call => sendMessage('call-ended', simplifyCall(call)));
+
+      onContactSelectedEvent(e => sendMessage('contact-selected', { ...e, call: simplifyCall(e.call) }));
 
       onCallRecordedEvent(record => sendMessage('call-recorded', record));
 
