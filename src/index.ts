@@ -18,6 +18,7 @@ const logger = (...args: any[]) => {
        fireConfigEvent,
        fireLogSavedEvent,
        fireMakeCallEvent,
+       fireNotification,
        onCallRecordedEvent,
        onCallUpdatedEvent,
        onCallEndedEvent,
@@ -26,6 +27,7 @@ const logger = (...args: any[]) => {
        onCallEvent,
        onLogEvent,
        onContactSelectedEvent,
+       onDuplicateContactCallAnsweredEvent,
      }) => {
       const app = window.parent;
 
@@ -61,6 +63,9 @@ const logger = (...args: any[]) => {
             case messageName('log-saved'):
               fireLogSavedEvent(data);
               break;
+            case messageName('notification'):
+              fireNotification(data);
+              break;
           }
         } catch (e) {
           logger('message error, invalid json string', e);
@@ -82,6 +87,8 @@ const logger = (...args: any[]) => {
       onContactSelectedEvent(e => sendMessage('contact-selected', { ...e, call: simplifyCall(e.call) }));
 
       onCallRecordedEvent(record => sendMessage('call-recorded', record));
+
+      onDuplicateContactCallAnsweredEvent(e => sendMessage('duplicate-contact-call-answered', { ...e, call: simplifyCall(e.call) }));
 
       onLogEvent(log => sendMessage('log', { ...log, call: simplifyCall(log.call) }));
     });
