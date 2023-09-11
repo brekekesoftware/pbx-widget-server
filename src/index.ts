@@ -1,13 +1,14 @@
 import { GlobalEventNames, GlobalEventDetails } from '@core/types/events';
 import { Call } from '@core/types/phone';
 
-const logger = (...args: any[]) => {
+const logName = 'brekeke-widget:server';
+const logger = (...args: unknown[]) => {
   if (!location.host.startsWith('localhost') && !location.host.startsWith('127.0.0.1')) return;
   if (typeof args[0] === 'string' && args[0].includes('error')) {
-    console.error('widget-server', ...args);
+    console.error(logName, ...args);
     return;
   }
-  console.log('widget-server', ...args);
+  console.log(logName, ...args);
 };
 
 (function () {
