@@ -20,7 +20,6 @@ const logger = (...args: unknown[]) => {
        fireLogSavedEvent,
        fireMakeCallEvent,
        fireNotification,
-       onCallRecordedEvent,
        onCallUpdatedEvent,
        onCallEndedEvent,
        onLoggedOutEvent,
@@ -86,8 +85,6 @@ const logger = (...args: unknown[]) => {
       onCallEndedEvent(call => sendMessage('call-ended', simplifyCall(call)));
 
       onContactSelectedEvent(e => sendMessage('contact-selected', { ...e, call: simplifyCall(e.call) }));
-
-      onCallRecordedEvent(record => sendMessage('call-recorded', record));
 
       onDuplicateContactCallAnsweredEvent(e => sendMessage('duplicate-contact-call-answered', { ...e, call: simplifyCall(e.call) }));
 
