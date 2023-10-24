@@ -1,9 +1,9 @@
-# Zendesk Widget
+# Widget Server
 
-Zendesk Integration for the PBX Widget.
+Widget Server provider for PBX Widget integration on Zendesk and Freshdesk.
 
 ## Usage
 
 - Run the command `npm install` to install all the dependencies, then run `npm run build` to build the project.
-- After building, copy the contents of the `dist` folder to a salesforce directory in your PBX webapps directory. EG `C:\Program Files\Brekeke\pbx\webapps\pbx\etc\widget\zendesk`
-- Set your Dynamics 365 Channel Provider's Channel URL in the format `[PBX_URL]/pbx/etc/widget/zendesk/index.html?crm=[CRM_URL]` EG `https://brekeke.com:8443/pbx/etc/widget/zendesk/index.html`
+- After building, copy the contents of the `dist` folder to a server directory in your PBX webapps directory. EG `C:\Program Files\Brekeke\pbx\webapps\pbx\etc\widget\server`
+- The Widget can now be accessed at `[PBX_URL]/pbx/etc/widget/server/index.html` EG `https://brekeke.com:8443/pbx/etc/widget/server/index.html`
